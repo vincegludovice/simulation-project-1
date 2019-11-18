@@ -4,11 +4,11 @@
 
 This project is using json-server to watch the json file, with a custom middleware for auth and tokenizing. 
 
-**Prerequisites** 
+**Prerequisites**  
 
 nodejs required and system should be installed on the machine.
 
-**Installing** 
+**Installing**  
 When nodejs is available, install json-server.
 
 ```
@@ -19,7 +19,9 @@ Afterwards, npm install will handle everything.
 ```
 npm install
 ```
-It will install dotenv, jsonwebtoken
+It will install 
+ - dotenv
+ - jsonwebtoken
 
 **Deployment** 
 Use nodemon backend/.bin/dev or 
