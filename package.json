@@ -20,7 +20,6 @@
   },
   "homepage": "https://github.com/kojiadrianojr/simulation-project-1#readme",
   "dependencies": {
-    "argon2": "^0.25.1",
     "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1"
   },
