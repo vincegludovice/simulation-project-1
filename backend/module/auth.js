@@ -2,7 +2,7 @@ const fs = require('fs')
 const jwt = require('jsonwebtoken')
 const userDb = JSON.parse(fs.readFileSync('./backend/json/db.json', 'UTF-8'))
 const expiresIn = '1h'
-const argon2 = require('argon2')
+
 
 function verifyToken(token){
     return jwt.verify(token, process.env.SECRET_KEY, (err,decode) => decode != undefined? decode:err)
