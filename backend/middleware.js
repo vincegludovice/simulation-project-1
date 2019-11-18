@@ -1,4 +1,4 @@
-const verify = require('./auth')
+const verify = require('./module/auth')
 
 function middleWare(req,res,next){
     if (!req.headers.auth){

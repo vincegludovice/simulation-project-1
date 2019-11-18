@@ -1,14 +1,11 @@
 const fs = require('fs')
 const jwt = require('jsonwebtoken')
-const userDb = JSON.parse(fs.readFileSync('./backend/db.json', 'UTF-8'))
-const SECRET_KEY = require('./secret')
+const userDb = JSON.parse(fs.readFileSync('./backend/json/db.json', 'UTF-8'))
 const expiresIn = '1h'
 const argon2 = require('argon2')
 
-let SECRET_TOKEN = ''
-
 function verifyToken(token){
-    return jwt.verify(token, SECRET_KEY, (err,decode) => decode != undefined? decode:err)
+    return jwt.verify(token, process.env.SECRET_KEY, (err,decode) => decode != undefined? decode:err)
 }
 
 function isAuthenticated({username, password}){
@@ -16,7 +13,7 @@ function isAuthenticated({username, password}){
 }
 
 function createToken(payLoad){
-    return jwt.sign(payLoad, SECRET_KEY, {expiresIn})
+    return jwt.sign(payLoad, process.env.SECRET_KEY, {expiresIn})
 }
 
 //for hashing the token
