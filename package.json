@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "json:server": "json-server --watch backend/db.json"
+    "json:server": "json-server --watch backend/json/db.json",
+    "json:server-auth": "nodemon backend/.bin/dev"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
   "homepage": "https://github.com/kojiadrianojr/simulation-project-1#readme",
   "dependencies": {
     "argon2": "^0.25.1",
+    "dotenv": "^8.2.0",
     "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {

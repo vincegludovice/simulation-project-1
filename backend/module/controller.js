@@ -1,4 +1,4 @@
-const auth = require('../auth')
+const auth = require('./auth')
 
 async function login(req,res){
     const { username, password } = req.body

@@ -1,1 +1,0 @@
-module.exports = '53cR3tW355VG3'
