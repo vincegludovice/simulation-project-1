@@ -24,7 +24,8 @@ It will install
  - jsonwebtoken
 
 **Deployment**  
-Use nodemon backend/.bin/dev or 
+Use 
+``` nodemon backend/.bin/dev ``` or 
 ```
 npm run json:server-auth
 ```
