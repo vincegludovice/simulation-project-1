@@ -1,0 +1,28 @@
+{
+  "name": "simulation-project-1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "json:server": "json-server --watch backend/db.json"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kojiadrianojr/simulation-project-1.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kojiadrianojr/simulation-project-1/issues"
+  },
+  "homepage": "https://github.com/kojiadrianojr/simulation-project-1#readme",
+  "dependencies": {
+    "argon2": "^0.25.1",
+    "jsonwebtoken": "^8.5.1"
+  },
+  "devDependencies": {
+    "json-server-auth": "^1.2.1"
+  }
+}
