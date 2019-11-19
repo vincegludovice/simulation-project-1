@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "json:server": "json-server --watch backend/json/db.json",
-    "json:server-auth": "nodemon backend/.bin/dev"
+    "json:server-auth": "node backend/.bin/dev"
   },
   "repository": {
     "type": "git",
