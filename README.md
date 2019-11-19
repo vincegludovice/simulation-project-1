@@ -4,19 +4,20 @@
 
 For this project we'll be simulating building a small application which requires
 a set of specified features. There will be no specified steps to implementing
-the required features, only an acceptance criteria for what the applications
+the required features, only an acceptance criteria for what the application
 should be able to accomplish.
 
 You are required to use **React.js** as the frontend web application UI library.
 Please do not mix things such as JQuery or raw DOM manipulation within this
-project, use React.js for all UI code.
+project, you should be able to accomplish all tasks utilizing React.js.
 
 Please follow the instructions below to get started with this project.
 
 ## Project Setup
 
 This project uses a development API that you'll need to utilize and make
-requests to. There are a few steps to get this API setup and running properly.
+requests to, to fetch data for the application. There are a few steps to get
+this API setup and running properly.
 
 ### System Requirements
 
@@ -46,6 +47,10 @@ This API is very simple and only has one resource, the users we just created at
 `http://localhost:3000/users`. This endpoint supports all of the typical HTTP
 methods (GET, POST, PUT, PATCH, DELETE).
 
+This development API is protected by an authorization method. You'll have to
+login and get an authorization token from the API to make requests for the
+users. This is explained in more detail in the **Registration Page** section.
+
 ## Project Requirements
 
 ### Pages
@@ -59,26 +64,33 @@ This application will consist of three pages.
 ### Registration Page:
 
 Users require a page to sign-up for this application. We will call this the
-registration page. The registration page needs to be able to accept the
+**Registration Page**. The registration page needs to be able to accept the
 following data from a user.
 
-- email address
+- email
 - username
 - firstName
 - lastName
 - password
 
-All of the above fields are **required**.
+All of the above fields are **required** to be filled out by the user that is
+registering.
+
+**Password Confirmation:**
 
 Users should be required to confirm their password by entering it twice before
 they can submit it to the server.
 
+**Form validation:**
+
 Validation should be added to ensure a submission cannot be made until all
 required data has been entered.
 
+**Posting Data**
+
 **Important:** When sending data to the `/register` endpoint add an `active`
 property with the value of `true` to the registration object. This value will be
-used later on.
+used later on when displaying user data.
 
 The data needs to be sent to the `/register` endpoint of the API server. If
 registration is successful, redirect the user to the `/login` page to have them
@@ -89,16 +101,19 @@ If an error occurs, display a helpful message to the user.
 ### Login Page:
 
 This page is going to be used by existing users to login to the application.
-Login will simply be an `email` address along with the user's `password`. There
-should be a link to the registration page so users that are not register yet can
-register.
+Login will simply be an `email` address along with the user's `password`.
 
-Again the data for logging in will simply be:
+There should also be a link to the **Registration Page** so users that are not
+registered yet can register.
+
+**Login:**
+
+Again the data for logging into the application will simply be:
 
 - email
 - password
 
-This data will then be passed to the `/login` API endpoint.
+This data will then be posted to the `/login` API endpoint.
 
 This endpoint will return an `authorizationToken`. You'll need to utilize this
 token when making subsequent requests for resources that require authorization
@@ -117,6 +132,8 @@ the user.
 authorized. If an unauthorized user attempts to navigate to this page they
 should be shown or redirected to the login page.
 
+**Users Table:**
+
 This pages should display a table populated with all of the users queried from
 the API. You can query users at the `/users` endpoint of the API.
 
@@ -131,6 +148,8 @@ There should be table columns for the following user fields.
 The `active` column should have a green dot indicating an active value of `true`
 and a red dot for an `active` value of `false`.
 
+**Editing User Data:**
+
 There should be an **edit** button for each row in the table. When clicked it
 should allow the user data to be edited. Only allow editing of `firstName`,
 `lastName`, `username`, `active`, `email`. If a user changes their mind about
@@ -140,8 +159,21 @@ editing, they should be able to safely exit from the editing UI.
 utilize the object's `id` in the url. For example `GET /users/1`, will make
 return the user object with `id` 1. This also works for other HTTP methods.
 
+**User Search:**
+
 There should be a search input that allows for filtering users by `username`.
 This filtering should be done client-side (in the react application).
 
+**Active Filter:**
+
 There should be a toggle that allows the user list to be filtered by **active**
 or **inactive** users.
+
+# Finished
+
+Don't forget to test all of the functionality of your implementation. Walk
+through the list of requirements and make sure you didn't miss anything and it
+works as expected.
+
+Once you've completed your implementation please turn in your source code via
+the method specified by the instructor.
