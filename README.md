@@ -6,7 +6,7 @@ This project is using json-server to watch the json file, with a custom middlewa
 
 **Prerequisites**  
 
-nodejs required and system should be installed on the machine.
+nodejs should be installed on the machine.
 
 **Installing**   
 When nodejs is available, install json-server.
