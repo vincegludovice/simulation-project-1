@@ -16,13 +16,19 @@ const router = jsonServer.router('./backend/json/db.json');
 server.use(bodyParser.json())
 server.use(jsonServer.defaults()); //load default jsonServer
 
-server.post('/login', controller.login)
-
+server.post('/login', controller.login);
 server.use(middleWare) 
-
-server.use('/api',router)
+server.use('/api',router);
 
 
 server.listen(PORT, ()=>{
-    console.log(`Now listening ( ͡°╭͜ʖ╮͡° )  @ ${PORT}`)
+    console.log(`
+     --> Now listening ( ͡°╭͜ʖ╮͡° )  @ ${PORT} <--
+    
+    ***RESOURCES***
+    http://localhost:${PORT}/api/users
+    http://localhost:${PORT}/api/data
+    http://localhost:${PORT}/api/usersList
+
+    `)
 })
