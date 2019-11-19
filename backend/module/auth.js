@@ -25,15 +25,12 @@ function createToken(payLoad){
 //     return await argon2.verify(hash, SECRET_TOKEN)
 // }
 
-function getSecuredToken(token){
-    return SECRET_TOKEN = token
-}
+// function getSecuredToken(token){
+//     return SECRET_TOKEN = token
+// }
 
 module.exports = {
     verifyToken,
     isAuthenticated,
-    createToken,
-    secure_token,
-    verify_hash,
-    getSecuredToken
+    createToken
 }
