@@ -16,14 +16,14 @@ function createToken(payLoad){
     return jwt.sign(payLoad, process.env.SECRET_KEY, {expiresIn})
 }
 
-//for hashing the token
-async function secure_token(token){
-    return await argon2.hash(token)
-}
 
-async function verify_hash(hash){
-    return await argon2.verify(hash, SECRET_TOKEN)
-}
+// async function secure_token(token){
+//     return await argon2.hash(token)
+// }
+
+// async function verify_hash(hash){
+//     return await argon2.verify(hash, SECRET_TOKEN)
+// }
 
 function getSecuredToken(token){
     return SECRET_TOKEN = token
