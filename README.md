@@ -23,6 +23,11 @@ It will install
  - dotenv
  - jsonwebtoken
 
+**Add .env file to root folder**
+
+.env file should include: 
+``` SECRET_KEY ```
+
 **Deployment**  
 Use 
 ``` nodemon backend/.bin/dev ``` or 
