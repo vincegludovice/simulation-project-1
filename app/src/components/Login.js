@@ -17,6 +17,8 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 import axios from "axios";
+import Swal from "sweetalert2";
+
 const useStyles = makeStyles(theme => ({
   "@global": {
     body: {
@@ -69,7 +71,8 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function Login() {
+export default function Login(props) {
+  // console.log(props.redirect);
   const classes = useStyles();
   const [values, setValues] = useState({
     password: ""
@@ -102,24 +105,48 @@ export default function Login() {
         )
       ) {
         setErrorEmail("");
+        // Login
+        axios
+          .post("http://localhost:3000/login", {
+            email: email,
+            password: values.password
+          })
+          .then(token => {
+            localStorage.setItem("Token", token.data.accessToken);
+            props.setToken(token.data.accessToken);
+            axios
+              .get(`http://localhost:3000/users?q=${email}`, {
+                headers: {
+                  Authorization: `Bearer ${localStorage.getItem("Token")}`
+                }
+              })
+              .then(res => {
+                localStorage.setItem("Name", res.data[0].firstName);
+                Swal.fire(
+                  `Logged in Successfully!`,
+                  `Welcome, ${res.data[0].firstName}!`
+                );
+                props.setRedirect(true);
+              })
+              .catch(e => {
+                Swal.fire({
+                  title: "Login Failed!",
+                  icon: "error",
+                  button: true
+                });
+              });
+          })
+          .catch(e => {
+            Swal.fire({
+              title: "Login Failed! Please check your email or password!",
+              icon: "error",
+              button: true
+            });
+          });
+        // Login End
       } else setErrorEmail("Please Enter a valid Email");
     }
-    // console.log(email  + "  " + passsword );
-    // var token =
-    //   "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imx5emFtYWUubWlyYWJldGVAYm9vbS5jYW1wIiwiaWF0IjoxNTc0Mzg3Mzk5LCJleHAiOjE1NzQzOTA5OTksInN1YiI6IjUyIn0.Ct7d1irLx4OEXPv1t89_zAVeJfXOzp_sRI_lOu5HR1o";
-    // axios({
-    //   method: "get",
-    //   url: `http://localhost:3000/users`,
-    //   headers: {
-    //     Authorization: `Bearer ${token}`
-    //   }
-    // }).then(data => {
-    //   console.log(data);
-    // });
   };
-  // useEffect(() => {
-
-  // });
   return (
     <Container
       maxWidth="xs"

@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Route,
   Link as RouterLink,
   BrowserRouter,
-  Switch
+  Switch,
+  Redirect
 } from "react-router-dom";
 import {
   Button,
@@ -18,6 +19,10 @@ import Background from "./components/Background";
 import Login from "./components/Login";
 import SignUp from "./components/SignUp";
 import ManageUsers from "./components/ManageUsers";
+import MenuItem from "@material-ui/core/MenuItem";
+import Menu from "@material-ui/core/Menu";
+import Swal from "sweetalert2";
+import "./App.css";
 
 const useStyles = makeStyles(theme => ({
   "@global": {
@@ -70,7 +75,25 @@ const useStyles = makeStyles(theme => ({
 
 export default function SignIn() {
   const classes = useStyles();
-
+  const [redirect, setRedirect] = useState(false);
+  const [token, setToken] = useState("");
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const handleClick = event => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const logout = () => {
+    setAnchorEl(null);
+    Swal.fire(
+      `Logged out Successfully!`,
+      `Goodbye, ${localStorage.getItem("Name")}!`
+    ).then(function() {
+      window.location = "/";
+      localStorage.clear();
+    });
+  };
   return (
     <React.Fragment>
       <Container
@@ -84,20 +107,67 @@ export default function SignIn() {
             <AppBar position="static">
               <Toolbar className={classes.toolbar}>
                 <Typography variant="h6">Boomsourcing Login Form</Typography>
-                <div>
-                  <RouterLink to="/">
-                    <Button className={classes.white}>login</Button>
-                  </RouterLink>
-                  <RouterLink to="/register">
-                    <Button className={classes.white}>register</Button>
-                  </RouterLink>
-                </div>
+                <Switch>
+                  <Route
+                    exact
+                    path={["/", "/login", "/register"]}
+                    render={() => (
+                      <div>
+                        <RouterLink to="/">
+                          <Button className={classes.white}>login</Button>
+                        </RouterLink>
+                        <RouterLink to="/register">
+                          <Button className={classes.white}>sign up</Button>
+                        </RouterLink>
+                      </div>
+                    )}
+                  />
+                  <Route
+                    path="/manageusers"
+                    render={() => (
+                      <div>
+                        <Button
+                          className={classes.white}
+                          aria-controls="simple-menu"
+                          aria-haspopup="true"
+                          onClick={handleClick}
+                        >
+                          My account
+                        </Button>
+                        <Menu
+                          id="simple-menu"
+                          anchorEl={anchorEl}
+                          keepMounted
+                          open={Boolean(anchorEl)}
+                          onClose={handleClose}
+                        >
+                          <MenuItem onClick={logout}>Logout</MenuItem>
+                        </Menu>
+                      </div>
+                    )}
+                  />
+                </Switch>
               </Toolbar>
             </AppBar>
+            {redirect || localStorage.getItem("Token") ? (
+              <Redirect to="/manageusers" />
+            ) : null}
             <Switch>
-              <Route exact path="/" component={Login} />
-              <Route path="/register" component={SignUp} />
-              <Route path="/manageUsers" component={ManageUsers} />
+              <Route
+                exact
+                path="/"
+                render={props => (
+                  <Login setRedirect={setRedirect} setToken={setToken} />
+                )}
+              />
+              <Route
+                path="/register"
+                render={props => <SignUp {...props} setToken={setToken} />}
+              />
+              <Route
+                path="/manageUsers"
+                render={props => <ManageUsers {...props} token={token} />}
+              />
             </Switch>
           </React.Fragment>
         </BrowserRouter>

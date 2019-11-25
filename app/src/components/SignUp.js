@@ -18,6 +18,9 @@ import InputAdornment from "@material-ui/core/InputAdornment";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
 
+import axios from "axios";
+import Swal from "sweetalert2";
+
 const useStyles = makeStyles(theme => ({
   "@global": {
     body: {
@@ -67,7 +70,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export default function SignUp() {
+export default function SignUp(props) {
   const classes = useStyles();
   const [values, setValues] = useState({
     password: ""
@@ -118,6 +121,7 @@ export default function SignUp() {
   const handleMouseDownPassword = event => {
     event.preventDefault();
   };
+  // const Post
   const handleSubmit = e => {
     e.preventDefault();
     fname === ""
@@ -132,9 +136,16 @@ export default function SignUp() {
     values.password === ""
       ? setErrorPass("This field is required")
       : setErrorPass("");
-    if (email === "") {
-      setErrorEmail("This field is required");
-    } else {
+    values.password.length < 8
+      ? setErrorPass("Password should be 8 or more characters!")
+      : setErrorPass("");
+    if (conf === "") setErrorConfirmPass("This field is required");
+    else if (conf !== values.password)
+      setErrorConfirmPass("The password did not match. Please try again.");
+    else setErrorConfirmPass("");
+
+    if (email === "") setErrorEmail("This field is required");
+    else {
       if (
         /^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/.test(
           email
@@ -143,12 +154,64 @@ export default function SignUp() {
         setErrorEmail("");
       } else setErrorEmail("Please Enter a valid Email");
     }
-    if (conf === "") {
-      setErrorConfirmPass("This field is required");
+    if (
+      email &&
+      username &&
+      lname &&
+      fname &&
+      conf === values.password &&
+      values.password.length >= 8
+    ) {
+      // Sign Up
+      axios
+        .post("http://localhost:3000/register/active=true", {
+          email: email,
+          username: username,
+          firstName: fname,
+          lastName: lname,
+          password: values.password
+        })
+        .then(token => {
+          localStorage.setItem("Token", token.data.accessToken);
+          props.setToken(token.data.accessToken);
+          axios
+            .get(`http://localhost:3000/users?q=${email}`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("Token")}`
+              }
+            })
+            .then(res => {
+              localStorage.setItem("Name", res.data[0].firstName);
+              Swal.fire({
+                title: "Signed Up Successfully",
+                text: "Please Sign In to your account",
+                icon: "success",
+                button: true
+              });
+              props.history.push("/");
+            })
+            .catch(e => {
+              Swal.fire({
+                title: "Failed to Signup!",
+                icon: "error",
+                button: true
+              });
+            });
+        })
+        .catch(e => {
+          Swal.fire({
+            title: "Failed to Signup! Please try again",
+            icon: "error",
+            button: true
+          });
+        });
+      // Sign Up End
     } else {
-      if (conf !== values.password) {
-        setErrorConfirmPass("The password did not match. Please try again.");
-      } else setErrorConfirmPass("");
+      Swal.fire({
+        title: "Please complete the Sign Up form first",
+        icon: "warning",
+        button: true
+      });
     }
   };
   return (
