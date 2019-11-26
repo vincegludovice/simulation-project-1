@@ -12,12 +12,10 @@ import PersonOutlined from "@material-ui/icons/PersonOutlined";
 import Create from "@material-ui/icons/Create";
 import EmailOutlined from "@material-ui/icons/EmailOutlined";
 import AssignmentIndIcon from "@material-ui/icons/AssignmentInd";
-
 import IconButton from "@material-ui/core/IconButton";
 import InputAdornment from "@material-ui/core/InputAdornment";
 import Visibility from "@material-ui/icons/Visibility";
 import VisibilityOff from "@material-ui/icons/VisibilityOff";
-
 import axios from "axios";
 import Swal from "sweetalert2";
 
@@ -40,7 +38,6 @@ const useStyles = makeStyles(theme => ({
     zIndex: "2"
   },
   paper: {
-    // marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -51,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: 10
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "100%",
     marginTop: theme.spacing(1)
   },
   submit: {
@@ -90,18 +87,6 @@ export default function SignUp(props) {
   const [ErrorPass, setErrorPass] = useState("");
   const [ErrorConfirmPass, setErrorConfirmPass] = useState("");
 
-  const handleChangeEmail = event => {
-    setEmail(event.target.value);
-  };
-  const handleChangeUsername = event => {
-    setUsername(event.target.value);
-  };
-  const handleChangeFname = event => {
-    setFname(event.target.value);
-  };
-  const handleChangeLname = event => {
-    setLname(event.target.value);
-  };
   const handleChangePassword = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
   };
@@ -192,20 +177,36 @@ export default function SignUp(props) {
                 window.location = "/";
               });
             })
-            .catch(e => {
-              Swal.fire({
-                title: "Failed to Sigdnup!",
-                icon: "error",
-                button: true
-              });
+            .catch(error => {
+              try {
+                Swal.fire({
+                  title: error.response.data,
+                  icon: "error",
+                  button: true
+                });
+              } catch {
+                Swal.fire({
+                  title: error,
+                  icon: "error",
+                  button: true
+                });
+              }
             });
         })
-        .catch(e => {
-          Swal.fire({
-            title: "Failed to Signup! Please try again",
-            icon: "error",
-            button: true
-          });
+        .catch(error => {
+          try {
+            Swal.fire({
+              title: error.response.data,
+              icon: "error",
+              button: true
+            });
+          } catch {
+            Swal.fire({
+              title: error,
+              icon: "error",
+              button: true
+            });
+          }
         });
       // Sign Up End
     } else {
@@ -246,7 +247,7 @@ export default function SignUp(props) {
                   autoComplete="emailadd"
                   style={{ margin: 8 }}
                   fullWidth
-                  onChange={e => handleChangeEmail(e)}
+                  onChange={e => setEmail(e.target.value)}
                   InputLabelProps={{ required: false }}
                 />
               </Grid>
@@ -268,7 +269,7 @@ export default function SignUp(props) {
                   autoComplete="username"
                   style={{ margin: 8 }}
                   fullWidth
-                  onChange={e => handleChangeUsername(e)}
+                  onChange={e => setUsername(e.target.value)}
                   InputLabelProps={{ required: false }}
                 />
               </Grid>
@@ -290,7 +291,7 @@ export default function SignUp(props) {
                   autoComplete="fname"
                   style={{ margin: 8 }}
                   fullWidth
-                  onChange={e => handleChangeFname(e)}
+                  onChange={e => setFname(e.target.value)}
                   InputLabelProps={{ required: false }}
                 />
               </Grid>
@@ -312,7 +313,7 @@ export default function SignUp(props) {
                   autoComplete="lname"
                   style={{ margin: 8 }}
                   fullWidth
-                  onChange={e => handleChangeLname(e)}
+                  onChange={e => setLname(e.target.value)}
                   InputLabelProps={{ required: false }}
                 />
               </Grid>

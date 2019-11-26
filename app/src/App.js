@@ -43,7 +43,6 @@ const useStyles = makeStyles(theme => ({
     zIndex: "2"
   },
   paper: {
-    // marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -54,7 +53,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: theme.palette.secondary.main
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "100%",
     marginTop: theme.spacing(1)
   },
   submit: {
@@ -106,7 +105,7 @@ export default function SignIn() {
           <React.Fragment>
             <AppBar position="static">
               <Toolbar className={classes.toolbar}>
-                <Typography variant="h6">Boomsourcing Login Form</Typography>
+                <Typography variant="h6">Boomsourcing</Typography>
                 <Switch>
                   <Route
                     exact

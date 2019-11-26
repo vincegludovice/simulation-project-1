@@ -40,9 +40,6 @@ const useStyles = makeStyles(theme => ({
     webkitTransform: "translate(-50%, -50%)",
     transform: "translate(-50%, -50%)",
     zIndex: "2",
-    // position: "fixed",
-    // marginTop: "450px!important",
-    // marginLeft: "55rem!important"
     maxHeight: "50rem",
     overflowY: "auto"
   },
@@ -74,8 +71,7 @@ export default function ManageUsers(props) {
     rgba(0,0,123,0.4)
     url("https://sweetalert2.github.io/images/nyan-cat.gif")
     left top
-    no-repeat
-  `
+    no-repeat`
     }).then(function() {
       window.location = "/";
     });

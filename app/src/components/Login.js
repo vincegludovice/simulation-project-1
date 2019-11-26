@@ -3,8 +3,6 @@ import {
   Grid,
   Button,
   TextField,
-  FormControlLabel,
-  Checkbox,
   Typography,
   Container
 } from "@material-ui/core";
@@ -71,7 +69,6 @@ const useStyles = makeStyles(theme => ({
 }));
 
 export default function Login(props) {
-  // console.log(props.redirect);
   const classes = useStyles();
   const [values, setValues] = useState({
     password: ""
@@ -82,14 +79,8 @@ export default function Login(props) {
   const handleChangePassword = prop => event => {
     setValues({ ...values, [prop]: event.target.value });
   };
-  const handleChangeEmail = event => {
-    setEmail(event.target.value);
-  };
   const handleClickShowPassword = () => {
     setValues({ ...values, showPassword: !values.showPassword });
-  };
-  const handleMouseDownPassword = event => {
-    event.preventDefault();
   };
   const handleSubmit = e => {
     e.preventDefault();
@@ -104,46 +95,70 @@ export default function Login(props) {
         )
       ) {
         setErrorEmail("");
-        // Login
-        axios
-          .post("http://localhost:3000/login", {
-            email: email,
-            password: values.password
-          })
-          .then(token => {
-            localStorage.setItem("Token", token.data.accessToken);
-            props.setToken(token.data.accessToken);
-            axios
-              .get(`http://localhost:3000/users?q=${email}`, {
-                headers: {
-                  Authorization: `Bearer ${localStorage.getItem("Token")}`
-                }
-              })
-              .then(res => {
-                localStorage.setItem("Name", res.data[0].firstName);
-                Swal.fire(
-                  `Logged in Successfully!`,
-                  `Welcome, ${res.data[0].firstName}!`
-                );
-                props.setRedirect(true);
-              })
-              .catch(e => {
+      } else setErrorEmail("Please Enter a valid Email");
+    }
+    if (email && values.password.length >= 8) {
+      // Login
+      axios
+        .post("http://localhost:3000/login", {
+          email: email,
+          password: values.password
+        })
+        .then(token => {
+          localStorage.setItem("Token", token.data.accessToken);
+          props.setToken(token.data.accessToken);
+          axios
+            .get(`http://localhost:3000/users?q=${email}`, {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("Token")}`
+              }
+            })
+            .then(res => {
+              localStorage.setItem("Name", res.data[0].firstName);
+              Swal.fire(
+                `Logged in Successfully!`,
+                `Welcome, ${res.data[0].firstName}!`
+              );
+              props.setRedirect(true);
+            })
+            .catch(error => {
+              try {
                 Swal.fire({
-                  title: "Login Failed!",
+                  title: error.response.data,
                   icon: "error",
                   button: true
                 });
-              });
-          })
-          .catch(e => {
+              } catch {
+                Swal.fire({
+                  title: error,
+                  icon: "error",
+                  button: true
+                });
+              }
+            });
+        })
+        .catch(error => {
+          try {
             Swal.fire({
-              title: "Login Failed! Please check your email or password!",
+              title: error.response.data,
               icon: "error",
               button: true
             });
-          });
-        // Login End
-      } else setErrorEmail("Please Enter a valid Email");
+          } catch {
+            Swal.fire({
+              title: error,
+              icon: "error",
+              button: true
+            });
+          }
+        });
+      // Login End
+    } else if (values.password.length < 8 && values.password.length > 0) {
+      Swal.fire({
+        title: "Login Failed! Please check your email or password!",
+        icon: "error",
+        button: true
+      });
     }
   };
   return (
@@ -152,10 +167,7 @@ export default function Login(props) {
       component="div"
       className={`${classes.paper} ${classes.rooot}`}
     >
-      {/* <Box> */}
-      {/* <Avatar className={classes.avatar}> */}
       <PersonPinIcon className={classes.avatar} />
-      {/* </Avatar> */}
       <Typography component="h1" variant="h5">
         Login
       </Typography>
@@ -178,7 +190,7 @@ export default function Login(props) {
               style={{ margin: 8 }}
               fullWidth
               type="email"
-              onChange={e => handleChangeEmail(e)}
+              onChange={e => setEmail(e.target.value)}
               InputLabelProps={{ required: false }}
             />
           </Grid>
@@ -210,7 +222,7 @@ export default function Login(props) {
                     <IconButton
                       aria-label="toggle password visibility"
                       onClick={handleClickShowPassword}
-                      onMouseDown={handleMouseDownPassword}
+                      onMouseDown={e => e.preventDefault()}
                     >
                       {values.showPassword ? <Visibility /> : <VisibilityOff />}
                     </IconButton>
@@ -234,20 +246,7 @@ export default function Login(props) {
         >
           Sign In
         </Button>
-        {/* <Grid container>
-           <Grid item xs>
-          <Link href="#" variant="body2">
-            Forgot password?
-          </Link>
-        </Grid>
-          <Grid item>
-            <Link href="#" variant="body2">
-              {"Don't have an account? Sign Up"}
-            </Link>
-          </Grid>
-        </Grid> */}
       </form>
-      {/* </Box> */}
     </Container>
   );
 }
