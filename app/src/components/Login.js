@@ -38,7 +38,6 @@ const useStyles = makeStyles(theme => ({
     zIndex: "2"
   },
   paper: {
-    // marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     alignItems: "center",
@@ -49,7 +48,7 @@ const useStyles = makeStyles(theme => ({
     marginTop: 10
   },
   form: {
-    width: "100%", // Fix IE 11 issue.
+    width: "100%",
     marginTop: theme.spacing(1)
   },
   submit: {
@@ -171,7 +170,7 @@ export default function Login(props) {
               helperText={ErrorEmail ? ErrorEmail : ""}
               variant="standard"
               margin="normal"
-              required
+              required={true}
               id="email input-with-icon-grid standard-full-width"
               label="Email Address"
               name="email"
@@ -180,6 +179,7 @@ export default function Login(props) {
               fullWidth
               type="email"
               onChange={e => handleChangeEmail(e)}
+              InputLabelProps={{ required: false }}
             />
           </Grid>
         </Grid>
@@ -203,6 +203,7 @@ export default function Login(props) {
               type={values.showPassword ? "text" : "password"}
               value={values.password}
               onChange={handleChangePassword("password")}
+              InputLabelProps={{ required: false }}
               InputProps={{
                 endAdornment: (
                   <InputAdornment position="end">
@@ -219,10 +220,10 @@ export default function Login(props) {
             />
           </Grid>
         </Grid>
-        <FormControlLabel
+        {/* <FormControlLabel
           control={<Checkbox value="remember" color="primary" />}
           label="Remember me"
-        />
+        /> */}
         <Button
           type="submit"
           fullWidth

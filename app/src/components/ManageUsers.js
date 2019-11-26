@@ -1,19 +1,34 @@
 import React, { useEffect, useState } from "react";
-import MaterialTable, { MTableToolbar } from "material-table";
+import MaterialTable from "material-table";
 import { Container } from "@material-ui/core";
-import { makeStyles } from "@material-ui/core/styles";
+import { makeStyles, createMuiTheme } from "@material-ui/core/styles";
 import axios from "axios";
-import Input from "@material-ui/core/Input";
-import InputLabel from "@material-ui/core/InputLabel";
-import MenuItem from "@material-ui/core/MenuItem";
-import FormControl from "@material-ui/core/FormControl";
-import ListItemText from "@material-ui/core/ListItemText";
-import Select from "@material-ui/core/Select";
-import Checkbox from "@material-ui/core/Checkbox";
-import red from "../components/red2.png";
-import green from "../components/red.png";
 import Swal from "sweetalert2";
+import { ThemeProvider } from "@material-ui/styles";
+import Typography from "@material-ui/core/Typography";
+import Badge from "@material-ui/core/Badge";
+const theme = createMuiTheme({
+  palette: {
+    primary: {
+      main: "#11CB5F"
+    },
+    secondary: {
+      main: "#CB3311"
+    }
+  }
+});
 const useStyles = makeStyles(theme => ({
+  margin: {
+    margin: theme.spacing(2)
+  },
+  padding: {
+    padding: theme.spacing(0, 2)
+  },
+  badge: {
+    minWidth: "0px",
+    height: "12px",
+    marginTop: "12px"
+  },
   rooot: {
     background: "#FFF",
     borderRadius: "8px",
@@ -24,7 +39,12 @@ const useStyles = makeStyles(theme => ({
     msTransform: "translate(-50%, -50%)",
     webkitTransform: "translate(-50%, -50%)",
     transform: "translate(-50%, -50%)",
-    zIndex: "2"
+    zIndex: "2",
+    // position: "fixed",
+    // marginTop: "450px!important",
+    // marginLeft: "55rem!important"
+    maxHeight: "50rem",
+    overflowY: "auto"
   },
   formControl: {
     margin: theme.spacing(1),
@@ -32,7 +52,6 @@ const useStyles = makeStyles(theme => ({
     maxWidth: 300
   },
   paper: {
-    // marginTop: theme.spacing(8),
     display: "flex",
     flexDirection: "column",
     margin: "0 auto",
@@ -44,34 +63,6 @@ const useStyles = makeStyles(theme => ({
     paddingRight: 20
   }
 }));
-
-//
-
-// const ITEM_HEIGHT = 48;
-// const ITEM_PADDING_TOP = 8;
-// const MenuProps = {
-//   PaperProps: {
-//     style: {
-//       maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-//       width: 250
-//     }
-//   }
-// };
-// const names = [
-//   "Oliver Hansen",
-//   "Van Henry",
-//   "April Tucker",
-//   "Ralph Hubbard",
-//   "Omar Alexander",
-//   "Carlos Abbott",
-//   "Miriam Wagner",
-//   "Bradley Wilkerson",
-//   "Virginia Andrews",
-//   "Kelly Snyder"
-// ];
-
-//
-
 export default function ManageUsers(props) {
   if (!localStorage.getItem("Token")) {
     Swal.fire({
@@ -94,29 +85,6 @@ export default function ManageUsers(props) {
     columns: [],
     data: []
   });
-  const [personName, setPersonName] = React.useState([]);
-  const ITEM_HEIGHT = 48;
-  const ITEM_PADDING_TOP = 8;
-  const MenuProps = {
-    PaperProps: {
-      style: {
-        maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
-        width: 250
-      }
-    }
-  };
-  const names = ["Active", "Inactive"];
-  function getStyles(name, personName, theme) {
-    return {
-      fontWeight:
-        personName.indexOf(name) === -1
-          ? theme.typography.fontWeightRegular
-          : theme.typography.fontWeightMedium
-    };
-  }
-  const handleChange = event => {
-    setPersonName(event.target.value);
-  };
   const classes = useStyles();
   useEffect(async () => {
     const result = await axios({
@@ -128,9 +96,13 @@ export default function ManageUsers(props) {
     });
     setState({ ...state, data: result.data });
   }, []);
+  if (!state.data) {
+    localStorage.clear();
+    return null;
+  }
   return localStorage.getItem("Token") ? (
     <Container
-      maxWidth="md"
+      maxWidth="lg"
       component="div"
       className={`${classes.paper} ${classes.rooot}`}
     >
@@ -138,62 +110,47 @@ export default function ManageUsers(props) {
         style={{ paddingLeft: 10 }}
         title="Users Data"
         columns={[
-          { title: "Email Address", field: "email" },
-          { title: "Firstname", field: "firstName" },
-          { title: "Lastname", field: "lastName" },
-          { title: "Username", field: "username" },
+          { title: "Email Address", field: "email", filtering: false },
+          { title: "Firstname", field: "firstName", filtering: false },
+          { title: "Lastname", field: "lastName", filtering: false },
+          { title: "Username", field: "username", filtering: false },
           {
             title: "Active Status",
             field: "active",
+            lookup: {
+              true: "Active",
+              false: "Inactive"
+            },
             render: rowData => (
-              <h1 style={{ paddingLeft: 30 }}>
-                {rowData.active ? (
-                  <img
-                    style={{ height: 10, borderRadius: "50%" }}
-                    src={green}
-                  />
-                ) : (
-                  <img style={{ height: 10, borderRadius: "50%" }} src={red} />
-                )}
-              </h1>
-            )
+              <ThemeProvider theme={theme}>
+                <Badge
+                  classes={{
+                    colorPrimary: classes.badge,
+                    colorSecondary: classes.badge
+                  }}
+                  color={
+                    rowData.active === "true" || rowData.active === true
+                      ? "primary"
+                      : "secondary"
+                  }
+                  badgeContent={" "}
+                  className={classes.margin}
+                >
+                  <Typography className={classes.padding}>
+                    {rowData.active === "true" || rowData.active === true
+                      ? "Active"
+                      : "Inactive"}
+                  </Typography>
+                </Badge>
+              </ThemeProvider>
+            ),
+            filtering: true
           }
         ]}
-        data={[...state.data]}
-        components={{
-          Toolbar: props => (
-            <div>
-              <MTableToolbar {...props} />
-              <div className={classes.sele}>
-                <FormControl className={classes.formControl}>
-                  <InputLabel id="demo-mutiple-checkbox-label">
-                    Filter
-                  </InputLabel>
-                  <Select
-                    labelId="demo-mutiple-checkbox-label"
-                    id="demo-mutiple-checkbox"
-                    multiple
-                    value={personName}
-                    onChange={handleChange}
-                    input={<Input />}
-                    renderValue={selected => selected.join(", ")}
-                    MenuProps={MenuProps}
-                  >
-                    {names.map(name => (
-                      <MenuItem key={name} value={name}>
-                        <Checkbox checked={personName.indexOf(name) > -1} />
-                        <ListItemText primary={name} />
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              </div>
-            </div>
-          )
-        }}
         options={{
-          search: true
+          filtering: true
         }}
+        data={[...state.data]}
         editable={{
           onRowUpdate: (newData, oldData) =>
             new Promise(resolve => {
@@ -201,13 +158,58 @@ export default function ManageUsers(props) {
                 resolve();
                 if (oldData) {
                   setState(prevState => {
-                    console.log(prevState);
                     const data = [...prevState.data];
                     data[data.indexOf(oldData)] = newData;
                     return { ...prevState, data };
                   });
                 }
+              }, 400);
+              axios
+                .patch(
+                  `http://localhost:3000/users/${newData.id}`,
+                  {
+                    email: newData.email,
+                    username: newData.username,
+                    firstName: newData.firstName,
+                    lastName: newData.lastName,
+                    active: newData.active
+                  },
+                  {
+                    headers: {
+                      Authorization: `Bearer ${localStorage.getItem("Token")}`
+                    }
+                  }
+                )
+                .then(
+                  Swal.fire({
+                    title: "Account has been edited!",
+                    icon: "success",
+                    button: true
+                  })
+                );
+            }),
+          onRowDelete: oldData =>
+            new Promise(resolve => {
+              setTimeout(() => {
+                resolve();
+                setState(prevState => {
+                  const data = [...prevState.data];
+                  data.splice(data.indexOf(oldData), 1);
+                  return { ...prevState, data };
+                });
               }, 600);
+              axios
+                .delete(`http://localhost:3000/users/${oldData.id}`, {
+                  headers: {
+                    Authorization: `Bearer ${localStorage.getItem("Token")}`
+                  }
+                })
+                .then(
+                  Swal.fire({
+                    icon: "success",
+                    title: "Account has been successfully deleted!"
+                  })
+                );
             })
         }}
       />

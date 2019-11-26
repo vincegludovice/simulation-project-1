@@ -123,7 +123,7 @@ export default function SignIn() {
                     )}
                   />
                   <Route
-                    path="/manageusers"
+                    path="/manage-users"
                     render={() => (
                       <div>
                         <Button
@@ -150,7 +150,7 @@ export default function SignIn() {
               </Toolbar>
             </AppBar>
             {redirect || localStorage.getItem("Token") ? (
-              <Redirect to="/manageusers" />
+              <Redirect to="/manage-users" />
             ) : null}
             <Switch>
               <Route
@@ -165,7 +165,7 @@ export default function SignIn() {
                 render={props => <SignUp {...props} setToken={setToken} />}
               />
               <Route
-                path="/manageUsers"
+                path="/manage-users"
                 render={props => <ManageUsers {...props} token={token} />}
               />
             </Switch>

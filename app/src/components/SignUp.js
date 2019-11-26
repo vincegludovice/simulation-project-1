@@ -169,7 +169,8 @@ export default function SignUp(props) {
           username: username,
           firstName: fname,
           lastName: lname,
-          password: values.password
+          password: values.password,
+          active: "true"
         })
         .then(token => {
           localStorage.setItem("Token", token.data.accessToken);
@@ -187,12 +188,13 @@ export default function SignUp(props) {
                 text: "Please Sign In to your account",
                 icon: "success",
                 button: true
+              }).then(function() {
+                window.location = "/";
               });
-              props.history.push("/");
             })
             .catch(e => {
               Swal.fire({
-                title: "Failed to Signup!",
+                title: "Failed to Sigdnup!",
                 icon: "error",
                 button: true
               });
@@ -245,6 +247,7 @@ export default function SignUp(props) {
                   style={{ margin: 8 }}
                   fullWidth
                   onChange={e => handleChangeEmail(e)}
+                  InputLabelProps={{ required: false }}
                 />
               </Grid>
             </Grid>
@@ -266,6 +269,7 @@ export default function SignUp(props) {
                   style={{ margin: 8 }}
                   fullWidth
                   onChange={e => handleChangeUsername(e)}
+                  InputLabelProps={{ required: false }}
                 />
               </Grid>
             </Grid>
@@ -287,6 +291,7 @@ export default function SignUp(props) {
                   style={{ margin: 8 }}
                   fullWidth
                   onChange={e => handleChangeFname(e)}
+                  InputLabelProps={{ required: false }}
                 />
               </Grid>
             </Grid>
@@ -308,6 +313,7 @@ export default function SignUp(props) {
                   style={{ margin: 8 }}
                   fullWidth
                   onChange={e => handleChangeLname(e)}
+                  InputLabelProps={{ required: false }}
                 />
               </Grid>
             </Grid>
@@ -331,6 +337,7 @@ export default function SignUp(props) {
                   type={values.showPassword ? "text" : "password"}
                   value={values.password}
                   onChange={handleChangePassword("password")}
+                  InputLabelProps={{ required: false }}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
@@ -371,6 +378,7 @@ export default function SignUp(props) {
                   type={confirmValues.showPassword ? "text" : "password"}
                   value={conf}
                   onChange={handleChangeConfrmPassword()}
+                  InputLabelProps={{ required: false }}
                   InputProps={{
                     endAdornment: (
                       <InputAdornment position="end">
